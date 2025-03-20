@@ -1,12 +1,6 @@
 import axios from "axios";
 
-interface error{
-    backendMessage: string;
-    message: string;
-    method: string;
-    url: string;
-    timestamp: string;
-}
+import { error } from "@/interfaces/interfaces";
 
 export async function loginAuth(mail: string, password: string):Promise<number | error> {
     try {

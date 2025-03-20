@@ -5,12 +5,14 @@ export default function Browser() {
         <div className='flex items-center justify-center my-10'>
             <input 
             type="text" 
-            placeholder="Find a chat . . ."
+            placeholder="Find a chat..."
             className='placeholder-white text-white bg-[#484848]/76 px-4 py-3 
                         rounded-l-2xl tracking-widest text-xl outline-none'
             />
             <button className='bg-white/10 h-full px-3 rounded-r-2xl cursor-pointer flex
-                                items-center justify-center py-1'>
+                                items-center justify-center py-1'
+            title='Search'
+            >
                 <Image 
                 src="/Search.png" 
                 alt="logo" 
