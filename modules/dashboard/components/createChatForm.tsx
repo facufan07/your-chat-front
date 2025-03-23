@@ -7,11 +7,11 @@ import { CreateChat } from "../services/createChat";
 
 interface CreateChatFormProps {
     setChatModal: (modal: boolean) => void;
-    setIsCreated: (isCreated: number) => void
-    isCreated: number;
+    setReload: (reload: number) => void
+    reload: number;
 }
 
-export default function CreateChatForm({ setChatModal, setIsCreated, isCreated } : CreateChatFormProps) {
+export default function CreateChatForm({ setChatModal, setReload, reload } : CreateChatFormProps) {
     const [name, setName] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
@@ -20,7 +20,7 @@ export default function CreateChatForm({ setChatModal, setIsCreated, isCreated }
         setIsDisabled(true);
         CreateChat(name).then((response) => {
             if(response === 201){
-                setIsCreated(isCreated + 1);
+                setReload(reload + 1);
                 setChatModal(false);
             }
             else{

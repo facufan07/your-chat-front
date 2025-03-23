@@ -14,7 +14,7 @@ import CreateChatForm from '../components/createChatForm'
 export default function Dash() {
     const [chats, setChats] = useState<chat[]>([]);
     const [chatModal, setChatModal] = useState<boolean>(false);
-    const [isCreated, setisCreated] = useState<number>(0);
+    const [reload, setReload] = useState<number>(0);
 
     useEffect(() => {
         if(chatModal){
@@ -32,7 +32,7 @@ export default function Dash() {
         }
 
         handleChat();
-    },[isCreated])
+    },[reload])
 
     
 
@@ -45,7 +45,8 @@ export default function Dash() {
             className="object-cover absolute z-[-1]"
             />
 
-            <section className='bg-black/76 w-[35%] h-[75%] flex flex-col items-center relative '>
+            <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[95%] flex flex-col items-center relative 
+                                max-lg:w-[90%]'>
                 <Image 
                 src="/logoyourchatt.png" 
                 alt="logo" 
@@ -61,6 +62,9 @@ export default function Dash() {
                         name={chat.name} 
                         creationDate={chat.creationDate} 
                         lastMessageDate={chat.lastMessageDate}
+                        id={chat.id}
+                        setReload={setReload}
+                        reload={reload}
                         />
                     ))}
                 </div>
@@ -71,7 +75,7 @@ export default function Dash() {
 
                 {chatModal && (
                     <div className='absolute left-0 w-full h-[auto] bg-[#484848]/86 px-7 py-5'>
-                        <CreateChatForm setChatModal={setChatModal} setIsCreated={setisCreated} isCreated={isCreated}/>
+                        <CreateChatForm setChatModal={setChatModal} setReload={setReload} reload={reload}/>
                     </div>
                 )}
             </section>

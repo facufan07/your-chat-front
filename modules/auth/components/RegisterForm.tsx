@@ -7,8 +7,9 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ type, setType }: RegisterFormProps) {
     return(
-        <div className="w-[42%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10">
-            <h1 className="text-white text-3xl tracking-widest font-semibold mb-7">Register</h1>
+        <div className="w-[52%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10
+                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center">
+            <h1 className="text-white text-3xl tracking-widest font-semibold mb-7 max-sm:text-2xl">Register</h1>
 
             <form action="" className="">
                 <TextField
@@ -87,7 +88,7 @@ export default function RegisterForm({ type, setType }: RegisterFormProps) {
                 </div>
             </form>
 
-            <span className="text-white tracking-widest mt-4 text-sm">Do you have an account?</span>
+            <span className="text-white tracking-widest mt-4 text-sm max-lg:text-center">Do you have an account?</span>
             <button 
             className="tracking-widest mt-2 text-sm 
                     text-white border-b-[1px] pb-0.5 cursor-pointer hover:text-white/50

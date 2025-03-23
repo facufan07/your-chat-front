@@ -25,8 +25,9 @@ export default function LoginForm({ type, setType }: LoginFormProps) {
     };
 
     return(
-        <div className="w-[42%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10">
-            <h1 className="text-white text-3xl tracking-widest font-semibold mb-9">Sign in</h1>
+        <div className="w-[52%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10
+                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center">
+            <h1 className="text-white text-3xl tracking-widest font-semibold mb-9 max-sm:text-2xl">Sign in</h1>
 
             <form onSubmit={handleSubmit} className="">
                 <TextField
@@ -55,13 +56,13 @@ export default function LoginForm({ type, setType }: LoginFormProps) {
                 <TextField
                 label="Password"
                 variant="outlined"
-                className="bg-black/54 rounded-lg shadow-md "
+                className="bg-black/54 rounded-lg shadow-md"
                 fullWidth
                 type="password"
                 required
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{
-                    marginTop: "60px",
+                    marginTop: "30px",
                     "& .MuiInputLabel-root": {
                     color: "#fff",
                     letterSpacing: "1.5px",
@@ -74,7 +75,7 @@ export default function LoginForm({ type, setType }: LoginFormProps) {
                     },
                 }}
                 />
-                <div className="w-full flex flex-col items-center mt-10">
+                <div className="w-full flex flex-col items-center mt-10 max-lg:mt-5">
                     <button type="submit" 
                     className="mx-auto tracking-widest font-semibold bg-[#737373]/35 
                                 px-6 py-2 rounded-4xl hover:bg-[#737373]/50 transition duration-200
@@ -85,7 +86,7 @@ export default function LoginForm({ type, setType }: LoginFormProps) {
                 </div>
             </form>
 
-            <span className="text-white tracking-widest mt-7 text-sm">Don't have an account?</span>
+            <span className="text-white tracking-widest mt-7 text-sm max-lg:text-center">Don't have an account?</span>
             <button 
             className="tracking-widest mt-2 text-sm 
                     text-white border-b-[1px] pb-0.5 cursor-pointer hover:text-white/50
