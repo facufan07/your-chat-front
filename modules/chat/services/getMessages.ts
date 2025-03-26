@@ -1,15 +1,9 @@
-import { contentMessage, totalPages } from "@/interfaces/interfaces";
+import { contentMessage } from "@/interfaces/interfaces";
 import axios from "axios";
 
-export async function getMessages(chatId: number) {
+export async function getMessages(chatId: number, totalPages: number) {
     try{
-        const res = await axios.get<totalPages>(`http://localhost:8080/api/v1/message/${chatId}`,{
-            withCredentials: true,
-        });
-
-        console.log(res.data.totalPages);
-
-        const response = await axios.get<contentMessage>(`http://localhost:8080/api/v1/message/${chatId}?page=${res.data.totalPages - 1}`,{
+        const response = await axios.get<contentMessage>(`http://localhost:8080/api/v1/message/${chatId}?page=${totalPages - 1}`,{
             withCredentials: true,
         });
 

@@ -4,6 +4,7 @@ import { message } from "@/interfaces/interfaces";
 import { useEffect, useRef } from "react"
 import { getMessages } from "../services/getMessages";
 import "./chat.css"
+import { getLastPage } from "../services/getLastPage";
 
 interface MessagesProps {
     chatId: number
@@ -16,17 +17,21 @@ export default function Messages({chatId, setMessages , messages}: MessagesProps
     const chatRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        
         const handleMessages = async () => {
             try{
-                const data = await getMessages(chatId);
+                const pages = await getLastPage(chatId);
+    
+                const data = await getMessages(chatId, pages);
                 setMessages(data);
             }
             catch{
                 setMessages([]);
             }
         }
-
+        
         handleMessages();
+        
     },[])
 
     useEffect(() => {

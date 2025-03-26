@@ -43,7 +43,7 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
             className="hover:scale-90 transition-all duration-200"
             />
         </button>
-        <form onSubmit={handleSubmit} className="flex items-center gap-4 py-5 px-4">
+        <form onSubmit={handleSubmit} className="flex items-center gap-4 py-5 pl-4">
             
             <input
             className="bg-black/74 rounded-lg shadow-lg px-5 w-full text-white tracking-widest

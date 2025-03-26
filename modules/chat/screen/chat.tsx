@@ -47,7 +47,11 @@ export default function Chat({ chatId }: { chatId: string }) {
                     </h1>
                 </div>
 
-                <Messages chatId={id} messages={message} setMessages={setMessage}/>
+                <Messages 
+                chatId={id} 
+                messages={message} 
+                setMessages={setMessage}
+                />
                 
                 <UtilBar chatId={id} messages={message} setMessages={setMessage}/>
             </section>
