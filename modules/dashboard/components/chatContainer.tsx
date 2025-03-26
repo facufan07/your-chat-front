@@ -5,6 +5,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/en"
 import { DeleteChat } from "../services/deleteChat";
+import Link from "next/link";
 
 interface chatContainerProps{
     name: string;
@@ -19,6 +20,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
 
     const [moreInfo, setMoreInfo] = useState<boolean>(false);
     const [deleteChat, setDeleteChat] = useState<boolean>(false);
+    const nameFormatted = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
 
     dayjs.locale("en");
 
@@ -67,15 +69,18 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
                     className="hover:scale-90 transition-all duration-200 cursor-pointer"
                     />
                 </button>
-                <button className="ml-3" title="Open chat">
-                    <Image 
-                    src="/Messagingg.png" 
-                    alt="logo" 
-                    width={30}
-                    height={35}
-                    className="hover:scale-90 transition-all duration-200 cursor-pointer"
-                    />
-                </button>
+                <Link href={`/dashboard/${nameFormatted + "-" + id}`}>
+                    <button className="ml-3" title="Open chat">
+                        <Image 
+                        src="/Messagingg.png" 
+                        alt="logo" 
+                        width={30}
+                        height={35}
+                        className="hover:scale-90 transition-all duration-200 cursor-pointer"
+                        />
+                    </button>
+                </Link>
+                
             </div>
 
             {moreInfo &&(
@@ -103,7 +108,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
 
             {deleteChat &&(
                 <div
-                className="absolute bg-black w-[400px] h-[55px] flex items-center 
+                className="absolute bg-black w-full h-[55px] flex items-center 
                             justify-between px-4 left-[0px] top-0 max-sm:w-[100%]"
                 >
                     <span

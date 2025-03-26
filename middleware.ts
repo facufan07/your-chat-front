@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
     const url = req.nextUrl;
+
     const isAuthenticated = await getAuthentication(req);
 
     console.log(isAuthenticated);
@@ -10,8 +11,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    const protectedRoutes = ["/dashboard", "/"];
-    if(!isAuthenticated && protectedRoutes.includes(url.pathname)) {
+    if(!isAuthenticated && url.pathname !== "/login"){
         return NextResponse.redirect(new URL("/login", req.url));
     }
 
@@ -42,5 +42,5 @@ async function getAuthentication(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/login", "/dashboard", "/"]
+    matcher: ["/login", "/dashboard/:path*", "/"]
 };
