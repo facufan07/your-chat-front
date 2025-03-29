@@ -61,6 +61,20 @@ export default function Dash() {
         }
     }
 
+    const reloadChats = async () => {
+        try {
+            const pages = await getLastPage(-1, "chat");
+            setMaxPage(pages - 1);
+        
+            setCurrentPage(0);
+        
+            const data = await getChats(0);
+            setChats(data);
+        } catch (error) {
+            setChats([]);
+        }
+    }
+
     useEffect(() => {
         if (currentPage > 0) {
             loadMoreMessages(currentPage);
@@ -90,40 +104,44 @@ export default function Dash() {
                 className='flex flex-col items-center h-[250px] overflow-y-auto gap-8 scroll px-2 '
                 ref={chatsRef}
                 >
-                    {chats.length === 0 ?(
+                    {chats.length === 0  ?(
                         <p className='text-white text-2xl tracking-widest font-semibold'>
                             Create your first chat!
                         </p>
                     ):(
-                        chats.map((chat) => (
+                        <>
+                        {chats.map((chat) => (
                             <ChatContainer 
                             key={chat.id} 
                             name={chat.name} 
                             creationDate={chat.creationDate} 
                             lastMessageDate={chat.lastMessageDate}
                             id={chat.id}
-                            setChats={setChats}
+                            reloadChats={reloadChats}
                             />
-                        ))
+                        ))}
+                        
+                        {currentPage < maxPage && (
+                            <button
+                            className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all duration-200 
+                                    cursor-pointer'
+                            onClick={() =>{
+                                setCurrentPage(currentPage + 1);
+                            }}
+                            >
+                                <Image 
+                                src="/upArrow.png" 
+                                alt="loadMore" 
+                                width={40}
+                                height={35}
+                                className="hover:scale-90 transition-all duration-200 rotate-180"
+                                />
+                            </button>
+                        )}
+                        
+                        </>
                     )}
                     
-                    {currentPage < maxPage && (
-                        <button
-                        className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all duration-200 
-                                cursor-pointer'
-                        onClick={() =>{
-                            setCurrentPage(currentPage + 1);
-                        }}
-                        >
-                            <Image 
-                            src="/upArrow.png" 
-                            alt="loadMore" 
-                            width={40}
-                            height={35}
-                            className="hover:scale-90 transition-all duration-200 rotate-180"
-                            />
-                        </button>
-                    )}
                         
                 </div>
                 

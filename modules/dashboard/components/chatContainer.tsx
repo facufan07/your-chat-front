@@ -6,17 +6,16 @@ import dayjs from "dayjs";
 import "dayjs/locale/en"
 import { DeleteChat } from "../services/deleteChat";
 import Link from "next/link";
-import { chat } from "@/interfaces/interfaces";
 
 interface chatContainerProps{
     name: string;
     creationDate: string;
     lastMessageDate: string;
     id: number;
-    setChats: Function;
+    reloadChats: Function;
 }
 
-export default function ChatContainer({ name, creationDate, lastMessageDate, id, setChats }: chatContainerProps) {
+export default function ChatContainer({ name, creationDate, lastMessageDate, id, reloadChats }: chatContainerProps) {
 
     const [moreInfo, setMoreInfo] = useState<boolean>(false);
     const [deleteChat, setDeleteChat] = useState<boolean>(false);
@@ -31,9 +30,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
         DeleteChat(id).then((response) => {
             console.log(response);
             if(response === 204){
-                setChats((prevChats: chat[]) => {
-                    return prevChats.filter((chat) => chat.id !== id);
-                });
+                reloadChats();
             }
         });
     }
