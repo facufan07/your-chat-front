@@ -5,6 +5,7 @@ import { loginAuth } from "../services/LoginAuth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./authComponent.css"
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface LoginFormProps {
     setType: (type: string) => void
@@ -14,14 +15,20 @@ export default function LoginForm({ setType }: LoginFormProps) {
     const router = useRouter();
     const [mail, setMail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setLoading(true);
         e.preventDefault();
         const status = await loginAuth(mail, password);
 
         if (status === 200) {
             router.push("/dashboard");
         }
+        else{
+            setLoading(false);
+        }
+
     };
 
     return(
@@ -94,7 +101,16 @@ export default function LoginForm({ setType }: LoginFormProps) {
             onClick={() => setType("register")}
             >
             Register now
+            
             </button>
+            
+            {loading && (
+            <div className="w-full mt-6">
+                <LinearProgress/>
+            </div>
+
+            )}
+            
         </div>
     )
 }

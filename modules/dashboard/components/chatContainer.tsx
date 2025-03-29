@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/en"
 import { DeleteChat } from "../services/deleteChat";
 import Link from "next/link";
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface chatContainerProps{
     name: string;
@@ -19,6 +20,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
 
     const [moreInfo, setMoreInfo] = useState<boolean>(false);
     const [deleteChat, setDeleteChat] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const nameFormatted = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
 
     dayjs.locale("en");
@@ -27,11 +29,16 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
     const lastMessageDateFormatted = dayjs(lastMessageDate).format("DD/MM/YYYY");
 
     const handleEliminate = () => {
+        setLoading(true);
         DeleteChat(id).then((response) => {
             console.log(response);
             if(response === 204){
                 reloadChats();
+                
             }
+            
+            setDeleteChat(false);
+            setLoading(false);
         });
     }
 
@@ -108,42 +115,48 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
             {deleteChat &&(
                 <div
                 className="absolute bg-black w-full h-[55px] flex items-center 
-                            justify-between px-4 left-[0px] top-0 max-sm:w-[100%]"
+                            justify-center px-4 left-[0px] top-0 max-sm:w-[100%] gap-20"
                 >
-                    <span
-                    className="text-white text-xs tracking-widest font-semibold"
-                    >
-                    Want to delete this chat?
-                    </span>
-                    
-                    <div className="h-full flex items-center gap-3">
-                        <button 
-                        title="Accept"
-                        onClick={handleEliminate}
+                    {loading ?(
+                        <CircularProgress size={30}/>
+                    ):(
+                        <>
+                        <span
+                        className="text-white text-xs tracking-widest font-semibold"
                         >
-                            <Image 
-                            src="/Done.png" 
-                            alt="logo" 
-                            width={35}
-                            height={35}
-                            className="hover:scale-90 transition-all duration-200 
-                                        cursor-pointer"
-                            />
-                        </button>
-                        <button 
-                        title="Cancel"
-                        onClick={() => setDeleteChat(false)}
-                        >
-                            <Image 
-                            src="/eliminate.png" 
-                            alt="logo" 
-                            width={35}
-                            height={35}
-                            className="hover:scale-90 transition-all duration-200 
-                                        cursor-pointer"
-                            />
-                        </button>
-                    </div>
+                        Want to delete this chat?
+                        </span>
+                        
+                        <div className="h-full flex items-center gap-3">
+                            <button 
+                            title="Accept"
+                            onClick={handleEliminate}
+                            >
+                                <Image 
+                                src="/Done.png" 
+                                alt="logo" 
+                                width={35}
+                                height={35}
+                                className="hover:scale-90 transition-all duration-200 
+                                            cursor-pointer"
+                                />
+                            </button>
+                            <button 
+                            title="Cancel"
+                            onClick={() => setDeleteChat(false)}
+                            >
+                                <Image 
+                                src="/eliminate.png" 
+                                alt="logo" 
+                                width={35}
+                                height={35}
+                                className="hover:scale-90 transition-all duration-200 
+                                            cursor-pointer"
+                                />
+                            </button>
+                        </div>
+                        </>
+                    )}
                     
                     
                 </div>

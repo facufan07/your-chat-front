@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { CreateChat } from "../services/createChat";
 import { chat } from "@/interfaces/interfaces";
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 interface CreateChatFormProps {
@@ -15,18 +16,22 @@ interface CreateChatFormProps {
 export default function CreateChatForm({ setChatModal, setError, setChats } : CreateChatFormProps) {
     const [name, setName] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setLoading(true);
         e.preventDefault();
         setIsDisabled(true);
         try{
             const response = await CreateChat(name);
             if(response.status === 201){
                 setChats((prevChats: chat[]) => [response.data, ...prevChats]);
+                setLoading(false);
                 setChatModal(false);
                 return;
             }
 
+            setLoading(false);
             setIsDisabled(false);
             setError("An error has ocurred, try again later.");
             setTimeout(() => {
@@ -35,6 +40,7 @@ export default function CreateChatForm({ setChatModal, setError, setChats } : Cr
         }
         catch(error){
             setIsDisabled(false);
+            setLoading(false);
             setError("An error has ocurred, try again later.");
             setTimeout(() => {
                 setError("");
@@ -88,6 +94,12 @@ export default function CreateChatForm({ setChatModal, setError, setChats } : Cr
             >
             Create
             </button>
+
+            {loading && 
+                <div className="w-full pt-5">
+                    <LinearProgress/>
+                </div>
+            }
         </form>
         
         </>

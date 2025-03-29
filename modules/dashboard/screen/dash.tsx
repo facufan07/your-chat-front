@@ -7,6 +7,7 @@ import NewChatButton from '../components/newChatButton'
 import { useEffect, useRef, useState } from 'react'
 import { getChats } from '../services/getChats'
 import { chat } from "@/interfaces/interfaces";
+import CircularProgress from '@mui/material/CircularProgress';
 
 import "./dash.css"
 import CreateChatForm from '../components/createChatForm'
@@ -22,6 +23,7 @@ export default function Dash() {
     const chatsRef = useRef<HTMLDivElement>(null);
     const [maxPage, setMaxPage] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         if(chatModal){
@@ -33,12 +35,13 @@ export default function Dash() {
                 const pages = await getLastPage(-1, "chat");
                 const data = await getChats(currentPage);
                 setChats(data);
-
+                setLoading(false);
                 setMaxPage(pages - 1);
                 
             }
             catch{
                 setChats([]);
+                setLoading(false);
             }
         }
         
@@ -104,42 +107,47 @@ export default function Dash() {
                 className='flex flex-col items-center h-[250px] overflow-y-auto gap-8 scroll px-2 '
                 ref={chatsRef}
                 >
-                    {chats.length === 0  ?(
-                        <p className='text-white text-2xl tracking-widest font-semibold'>
-                            Create your first chat!
-                        </p>
-                    ):(
-                        <>
-                        {chats.map((chat) => (
-                            <ChatContainer 
-                            key={chat.id} 
-                            name={chat.name} 
-                            creationDate={chat.creationDate} 
-                            lastMessageDate={chat.lastMessageDate}
-                            id={chat.id}
-                            reloadChats={reloadChats}
-                            />
-                        ))}
-                        
-                        {currentPage < maxPage && (
-                            <button
-                            className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all duration-200 
-                                    cursor-pointer'
-                            onClick={() =>{
-                                setCurrentPage(currentPage + 1);
-                            }}
-                            >
-                                <Image 
-                                src="/upArrow.png" 
-                                alt="loadMore" 
-                                width={40}
-                                height={35}
-                                className="hover:scale-90 transition-all duration-200 rotate-180"
+                    {loading === false ?(
+
+                        chats.length === 0  ?(
+                            <p className='text-white text-2xl tracking-widest font-semibold'>
+                                Create your first chat!
+                            </p>
+                        ):(
+                            <>
+                            {chats.map((chat) => (
+                                <ChatContainer 
+                                key={chat.id} 
+                                name={chat.name} 
+                                creationDate={chat.creationDate} 
+                                lastMessageDate={chat.lastMessageDate}
+                                id={chat.id}
+                                reloadChats={reloadChats}
                                 />
-                            </button>
-                        )}
-                        
-                        </>
+                            ))}
+                            
+                            {currentPage < maxPage && (
+                                <button
+                                className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all duration-200 
+                                        cursor-pointer'
+                                onClick={() =>{
+                                    setCurrentPage(currentPage + 1);
+                                }}
+                                >
+                                    <Image 
+                                    src="/upArrow.png" 
+                                    alt="loadMore" 
+                                    width={40}
+                                    height={35}
+                                    className="hover:scale-90 transition-all duration-200 rotate-180"
+                                    />
+                                </button>
+                            )}
+                            
+                            </>
+                        )
+                    ):(
+                        <CircularProgress/>
                     )}
                     
                         
