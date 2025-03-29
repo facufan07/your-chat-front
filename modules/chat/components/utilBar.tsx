@@ -18,6 +18,7 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if(message === "") return;
         
         const response = await CreateMessage(chatId, message, type);
         if(response !== false){

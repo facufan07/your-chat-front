@@ -7,14 +7,14 @@ export async function CreateChat(name: string) {
             withCredentials: true,
         });
 
-        return response.status;
+        return { status: response.status, data: response.data };
     }
     catch(error){
         if(axios.isAxiosError(error)){
-            return error.status;
+            return { status: error.response?.status, data: error.response?.data };
         }
 
-        console.error(error);
+        return { status: 500 , data: null };
     }
 
 }

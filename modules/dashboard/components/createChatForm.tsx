@@ -3,36 +3,48 @@ import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import Image from "next/image";
 import { CreateChat } from "../services/createChat";
+import { chat } from "@/interfaces/interfaces";
 
 
 interface CreateChatFormProps {
     setChatModal: (modal: boolean) => void;
-    setReload: (reload: number) => void
-    reload: number;
+    setChats: Function;
+    setError:Function
 }
 
-export default function CreateChatForm({ setChatModal, setReload, reload } : CreateChatFormProps) {
+export default function CreateChatForm({ setChatModal, setError, setChats } : CreateChatFormProps) {
     const [name, setName] = useState<string>("");
     const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsDisabled(true);
-        CreateChat(name).then((response) => {
-            if(response === 201){
-                setReload(reload + 1);
+        try{
+            const response = await CreateChat(name);
+            if(response.status === 201){
+                setChats((prevChats: chat[]) => [response.data, ...prevChats]);
                 setChatModal(false);
+                return;
             }
-            else{
-                setIsDisabled(false);
-            }
-        });
 
+            setIsDisabled(false);
+            setError("An error has ocurred, try again later.");
+            setTimeout(() => {
+                setError("");
+            }, 2000);
+        }
+        catch(error){
+            setIsDisabled(false);
+            setError("An error has ocurred, try again later.");
+            setTimeout(() => {
+                setError("");
+            }, 2000);
+        };
     }
 
     return (
         <>
-        <div className="w-full flex justify-between mb-5 items-center">
+        <div className="w-full flex justify-between mb-5 items-center pt-5">
             <h1 className="text-white text-2xl tracking-widest font-semibold">Create your chat</h1>
             <button className="cursor-pointer" onClick={() => setChatModal(false)}>
                 <Image 
@@ -45,7 +57,7 @@ export default function CreateChatForm({ setChatModal, setReload, reload } : Cre
                 />
             </button>
         </div>
-        <form onSubmit={handleSubmit} action="" className="flex flex-col items-center">
+        <form onSubmit={handleSubmit} action="" className="flex flex-col items-center pb-5">
             <TextField
             label="Name of your chat"
             variant="outlined"
@@ -77,6 +89,7 @@ export default function CreateChatForm({ setChatModal, setReload, reload } : Cre
             Create
             </button>
         </form>
+        
         </>
     )
 }

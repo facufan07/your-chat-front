@@ -1,9 +1,10 @@
 import axios from "axios";
 import { contentChat } from "@/interfaces/interfaces";
 
-export async function getChats() {
+export async function getChats(page: number) {
     try{
-        const response = await axios.get<contentChat>("http://localhost:8080/api/v1/chat", {
+        
+        const response = await axios.get<contentChat>("http://localhost:8080/api/v1/chat?page=" + page, {
             withCredentials: true,
         });
 

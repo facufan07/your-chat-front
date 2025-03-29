@@ -6,6 +6,7 @@ import UtilBar from '../components/utilBar';
 import Messages from '../components/messages';
 import { useState } from 'react';
 import { message } from '@/interfaces/interfaces';
+import "./chatScreen.css";
 
 
 export default function Chat({ chatId }: { chatId: string }) {
@@ -16,7 +17,7 @@ export default function Chat({ chatId }: { chatId: string }) {
     const [message, setMessage] = useState<message[]>([]);
 
     return (
-        <main className="h-dvh w-dvw flex justify-center items-center">
+        <main className="h-dvh w-dvw flex justify-center items-center overflow-x-hidden">
             <Image 
             src="/backgroundLogin.png" 
             alt="background" 
@@ -25,7 +26,7 @@ export default function Chat({ chatId }: { chatId: string }) {
             />
 
             <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[95%] flex flex-col items-center relative 
-                                max-lg:w-[90%]'>
+                                max-lg:w-[90%] fade-in'>
                 <div className='bg-[#484848]/86 w-full py-3 px-5 flex items-center'>
                     <Link href={`/dashboard`}>
                         <button className='cursor-pointer mt-2' title='Back'>

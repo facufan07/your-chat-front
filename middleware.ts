@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
 
     console.log(isAuthenticated);
 
-    if (isAuthenticated && url.pathname === "/login") {
+    if (isAuthenticated && (url.pathname === "/login" || url.pathname === "/")) {
         return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 

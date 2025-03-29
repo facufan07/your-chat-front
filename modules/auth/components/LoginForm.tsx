@@ -4,13 +4,13 @@ import TextField from "@mui/material/TextField";
 import { loginAuth } from "../services/LoginAuth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import "./authComponent.css"
 
 interface LoginFormProps {
-    type: string,
     setType: (type: string) => void
 };
 
-export default function LoginForm({ type, setType }: LoginFormProps) {
+export default function LoginForm({ setType }: LoginFormProps) {
     const router = useRouter();
     const [mail, setMail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -26,7 +26,7 @@ export default function LoginForm({ type, setType }: LoginFormProps) {
 
     return(
         <div className="w-[52%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10
-                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center">
+                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center fade-in-auth">
             <h1 className="text-white text-3xl tracking-widest font-semibold mb-9 max-sm:text-2xl">Sign in</h1>
 
             <form onSubmit={handleSubmit} className="">

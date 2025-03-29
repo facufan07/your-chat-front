@@ -6,17 +6,17 @@ import dayjs from "dayjs";
 import "dayjs/locale/en"
 import { DeleteChat } from "../services/deleteChat";
 import Link from "next/link";
+import { chat } from "@/interfaces/interfaces";
 
 interface chatContainerProps{
     name: string;
     creationDate: string;
     lastMessageDate: string;
     id: number;
-    setReload: (reload: number) => void;
-    reload: number;
+    setChats: Function;
 }
 
-export default function ChatContainer({ name, creationDate, lastMessageDate, id, reload, setReload }: chatContainerProps) {
+export default function ChatContainer({ name, creationDate, lastMessageDate, id, setChats }: chatContainerProps) {
 
     const [moreInfo, setMoreInfo] = useState<boolean>(false);
     const [deleteChat, setDeleteChat] = useState<boolean>(false);
@@ -31,7 +31,9 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
         DeleteChat(id).then((response) => {
             console.log(response);
             if(response === 204){
-                setReload(reload + 1);
+                setChats((prevChats: chat[]) => {
+                    return prevChats.filter((chat) => chat.id !== id);
+                });
             }
         });
     }
@@ -76,7 +78,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
                         alt="logo" 
                         width={30}
                         height={35}
-                        className="hover:scale-90 transition-all duration-200 cursor-pointer"
+                        className="hover:scale-90 transition-all duration-200 cursor-pointer mt-1.5"
                         />
                     </button>
                 </Link>

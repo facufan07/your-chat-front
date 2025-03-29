@@ -5,12 +5,13 @@ import Text from "../components/Text"
 import LoginForm from "../components/LoginForm"
 import { useState } from "react";
 import RegisterForm from "../components/RegisterForm";
+import "./auth.css"
 
 export default function Auth() {
     const [type, setType] = useState<string>("login");
 
     return(
-        <main className="h-dvh w-dwh flex justify-center items-center">
+        <main className="h-dvh w-dwh flex justify-center items-center overflow-x-hidden">
             <Image 
             src="/backgroundLogin.png" 
             alt="background" 
@@ -20,7 +21,7 @@ export default function Auth() {
 
             <section className="flex bg-black/76 h-[90%] w-4/5 px-16 justify-between items-center 
                                 max-sm:w-[95%] max-sm:flex-col max-sm:overflow-y-auto max-lg:h-[90%]
-                                ">
+                                fade-in overflow-x-hidden">
                 <div className="flex flex-col sm:mb-24">
                     <Image 
                     src="/logoyourchatt.png" 
@@ -32,7 +33,7 @@ export default function Auth() {
                     <Text/>
                 </div>
                 
-                {type === "login" ? <LoginForm type={type} setType={setType}/> : <RegisterForm type={type} setType={setType}/>}
+                {type === "login" ? <LoginForm setType={setType}/> : <RegisterForm setType={setType}/>}
             </section>
         
         </main>

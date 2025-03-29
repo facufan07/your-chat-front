@@ -1,17 +1,35 @@
+"use client"
 import TextField from "@mui/material/TextField";
+import { useState } from "react";
+import { RegisterAuth } from "../services/RegisterAuth";
+import { useRouter } from "next/navigation";
+import "./authComponent.css"
 
 interface RegisterFormProps {
-    type: string;
     setType: (type: string) => void;
 };
 
-export default function RegisterForm({ type, setType }: RegisterFormProps) {
+export default function RegisterForm({ setType }: RegisterFormProps) {
+    const router = useRouter();
+    const [mail, setMail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [repeatPassword, setRepeatPassword] = useState<string>("");
+    
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const status = await RegisterAuth(mail, password, repeatPassword);
+
+        if (status === 201) {
+            router.push("/dashboard");
+        }
+    };
+    
     return(
         <div className="w-[52%] h-4/5 bg-[#555252]/35 rounded-3xl flex flex-col items-center py-9 px-10
-                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center">
+                        max-sm:w-[100%] max-lg:h-auto max-sm:mb-7 justify-center fade-in-auth">
             <h1 className="text-white text-3xl tracking-widest font-semibold mb-7 max-sm:text-2xl">Register</h1>
 
-            <form action="" className="">
+            <form onSubmit={handleSubmit} className="">
                 <TextField
                 label="Email"
                 variant="outlined"
@@ -19,6 +37,7 @@ export default function RegisterForm({ type, setType }: RegisterFormProps) {
                 fullWidth
                 type="email"
                 required
+                onChange={(e) => setMail(e.target.value)}
                 sx={{
                     "& .MuiInputLabel-root": {
                     color: "#fff",
@@ -41,6 +60,7 @@ export default function RegisterForm({ type, setType }: RegisterFormProps) {
                 fullWidth
                 type="password"
                 required
+                onChange={(e) => setPassword(e.target.value)}
                 sx={{
                     marginTop: "20px",
                     "& .MuiInputLabel-root": {
@@ -62,6 +82,7 @@ export default function RegisterForm({ type, setType }: RegisterFormProps) {
                 className="bg-black/54 rounded-lg shadow-md "
                 fullWidth
                 type="password"
+                onChange={(e) => setRepeatPassword(e.target.value)}
                 required
                 sx={{
                     marginTop: "20px",
