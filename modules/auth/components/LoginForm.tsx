@@ -23,7 +23,9 @@ export default function LoginForm({ setType }: LoginFormProps) {
         const status = await loginAuth(mail, password);
 
         if (status === 200) {
-            router.push("/dashboard");
+            setTimeout(() => {
+                router.push("/dashboard");
+            }, 1000);
         }
         else{
             setLoading(false);
