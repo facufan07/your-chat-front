@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
 
 async function getAuthentication(req: NextRequest) {
     try{
-        const response = await fetch("http://localhost:8080/api/v1/auth/isAuth", {
+        const response = await fetch("https://your-chat-back-production.up.railway.app/api/v1/auth/isAuth", {
             method: 'GET',
             credentials: "include",
             headers:{
