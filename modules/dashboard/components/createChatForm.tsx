@@ -8,7 +8,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 
 interface CreateChatFormProps {
-    setChatModal: (modal: boolean) => void;
+    setChatModal: (modal: string) => void;
     setChats: Function;
     setError:Function
 }
@@ -19,6 +19,9 @@ export default function CreateChatForm({ setChatModal, setError, setChats } : Cr
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        if(name.includes("_")){
+            setName(name.replace(/_/g, " "));
+        };
         setLoading(true);
         e.preventDefault();
         setIsDisabled(true);
@@ -27,7 +30,7 @@ export default function CreateChatForm({ setChatModal, setError, setChats } : Cr
             if(response.status === 201){
                 setChats((prevChats: chat[]) => [response.data, ...prevChats]);
                 setLoading(false);
-                setChatModal(false);
+                setChatModal("");
                 return;
             }
 
@@ -52,7 +55,7 @@ export default function CreateChatForm({ setChatModal, setError, setChats } : Cr
         <>
         <div className="w-full flex justify-between mb-5 items-center pt-5">
             <h1 className="text-white text-2xl tracking-widest font-semibold">Create your chat</h1>
-            <button className="cursor-pointer" onClick={() => setChatModal(false)}>
+            <button className="cursor-pointer" onClick={() => setChatModal("")}>
                 <Image 
                 src="/Close.png" 
                 alt="logo" 

@@ -4,9 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link';
 import UtilBar from '../components/utilBar';
 import Messages from '../components/messages';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { message } from '@/interfaces/interfaces';
+import CircularProgress from '@mui/material/CircularProgress';
 import "./chatScreen.css";
+import { getMessages } from '../services/getMessages';
+import { getLastPage } from '@/utils/getLastPage';
 
 
 export default function Chat({ chatId }: { chatId: string }) {
@@ -15,6 +18,30 @@ export default function Chat({ chatId }: { chatId: string }) {
     const id = parseInt(chatId.split("-")[1]);
 
     const [message, setMessage] = useState<message[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+
+    useEffect(() => {
+            
+            const handleMessages = async () => {
+                try{
+                    const pages = await getLastPage(id, "message");
+    
+                    const data = await getMessages(id, pages);
+                    setMessage(data);
+                    setCurrentPage(pages - 1)
+                }
+                catch{
+                    setMessage([]);
+                    
+                }
+                
+                setLoading(false);
+            }
+            
+            handleMessages();
+            
+        },[])
 
     return (
         <main className="h-dvh w-dvw flex justify-center items-center overflow-x-hidden">
@@ -48,11 +75,19 @@ export default function Chat({ chatId }: { chatId: string }) {
                     </h1>
                 </div>
 
-                <Messages 
-                chatId={id} 
-                messages={message} 
-                setMessages={setMessage}
-                />
+                {loading ?(
+                    <div className='h-full w-full flex justify-center items-center'>
+                        <CircularProgress/>
+                    </div>
+                ):(
+                    <Messages 
+                    chatId={id} 
+                    messages={message} 
+                    setMessages={setMessage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    />
+                )}
                 
                 <UtilBar chatId={id} messages={message} setMessages={setMessage}/>
             </section>

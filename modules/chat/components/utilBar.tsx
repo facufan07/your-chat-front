@@ -4,6 +4,7 @@ import { message } from "@/interfaces/interfaces"
 import Image from "next/image"
 import { useState } from "react"
 import { CreateMessage } from "../services/createMessage"
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface UtilBarProps{
     chatId: number
@@ -15,19 +16,26 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
 
     const [type, setType] = useState<boolean>(true);
     const [message, setMessage] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const [isSending, setIsSending] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setIsSending(true);
         e.preventDefault();
         if(message === "") return;
-        
+        setLoading(true);
         const response = await CreateMessage(chatId, message, type);
         if(response !== false){
             setMessage("");
             setMessages([...messages, response]);
         }
+        setLoading(false);
+        setIsSending(false);
     }
 
     return(
+    <>
+    
     <div className="flex items-center py-5 px-4">
         <button 
         className={`rounded-full  transition-all duration-200
@@ -58,6 +66,7 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
                         cursor-pointer"
             title="Send message"
             type="submit"
+            disabled={isSending}
             >
                 <Image 
                 src="/Paper plane.png" 
@@ -70,5 +79,11 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
         </form>
         
     </div>
+    {loading &&(
+            <div className="w-full">
+                <LinearProgress />
+            </div>
+        )}
+    </>
     )
 }

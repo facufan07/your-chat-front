@@ -5,6 +5,7 @@ import Browser from '../components/browser'
 import ChatContainer from '../components/chatContainer'
 import NewChatButton from '../components/newChatButton'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { getChats } from '../services/getChats'
 import { chat } from "@/interfaces/interfaces";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,11 +14,13 @@ import "./dash.css"
 import CreateChatForm from '../components/createChatForm'
 import Alert from '@/utils/alert'
 import { getLastPage } from '@/utils/getLastPage'
+import { logout } from '../services/logout'
 
 export default function Dash() {
-    
+    const router = useRouter();
+
     const [chats, setChats] = useState<chat[]>([]);
-    const [chatModal, setChatModal] = useState<boolean>(false);
+    const [modal, setModal] = useState<string>("");
     const [error , setError] = useState<string>("");
 
     const chatsRef = useRef<HTMLDivElement>(null);
@@ -26,8 +29,8 @@ export default function Dash() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        if(chatModal){
-            setChatModal(false);
+        if(modal.length > 0){
+            setModal("");
         }
 
         const handleChat = async () => {
@@ -48,6 +51,14 @@ export default function Dash() {
         handleChat();
         return;
     },[])
+
+    async function handleLogout(){
+        const res = await logout();
+        if(res === 200){
+            router.push("/login");
+        }
+
+    }
 
     const loadMoreMessages = async (newPage: number) => {
         if(newPage <= maxPage && chatsRef.current){
@@ -128,8 +139,8 @@ export default function Dash() {
                             
                             {currentPage < maxPage && (
                                 <button
-                                className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all duration-200 
-                                        cursor-pointer'
+                                className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all 
+                                        duration-200 cursor-pointer'
                                 onClick={() =>{
                                     setCurrentPage(currentPage + 1);
                                 }}
@@ -153,18 +164,68 @@ export default function Dash() {
                         
                 </div>
                 
-                <NewChatButton
-                setChatModal={setChatModal}
-                />
+                <div
+                className='flex items-end w-full px-5 h-full mb-5'
+                >   
+                    <div className='flex items-center justify-between w-full'>
+                        <button 
+                        className='cursor-pointer bg-[#484848]/86 p-2 rounded-full 
+                                hover:bg-black/76 transition-all duration-200'
+                        onClick={() => setModal("user")}
+                        >
+                            <Image 
+                            src="/user.png" 
+                            alt="loadMore" 
+                            width={40}
+                            height={35}
+                            className="hover:scale-90 transition-all duration-200"
+                            />
+                        </button>
+                        <NewChatButton
+                        setChatModal={setModal}
+                        />
+                    </div>
 
-                {chatModal && (
+                </div>
+                
+
+                {modal === "createChat" && (
                     <div className='absolute left-0 w-full h-[auto] bg-[#484848]/86 px-7 
                                     fade-in-create-chat overflow-y-hidden'>
                         <CreateChatForm 
-                        setChatModal={setChatModal} 
+                        setChatModal={setModal} 
                         setChats={setChats} 
                         setError={setError}
                         />
+                    </div>
+                )}
+
+                {modal === "user" && (
+                    <div className='absolute left-0 w-full h-[auto] bg-[#484848]/86 px-7 
+                                    fade-in-create-chat overflow-y-hidden flex justify-center'>
+                        
+                        <button 
+                        className="cursor-pointer absolute top-5 right-5" 
+                        onClick={() => setModal("")}
+                        >
+                            <Image 
+                            src="/Close.png" 
+                            alt="logo" 
+                            width={40}
+                            height={35}
+                            className="hover:scale-90 transition-all duration-200
+                            "
+                            />
+                        </button>
+                        
+                        <button
+                        className='px-4 py-2 rounded-xl tracking-widest text-lg cursor-pointer
+                                    font-semibold hover:scale-90 transition-all duration-200
+                                    text-white bg-black/56 my-5'
+                        onClick={handleLogout}
+                        >
+                            Logout
+                        </button>
                     </div>
                 )}
                 {error !== "" && (

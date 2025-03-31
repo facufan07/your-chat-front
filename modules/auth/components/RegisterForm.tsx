@@ -4,6 +4,7 @@ import { useState } from "react";
 import { RegisterAuth } from "../services/RegisterAuth";
 import { useRouter } from "next/navigation";
 import "./authComponent.css"
+import LinearProgress from '@mui/material/LinearProgress';
 
 interface RegisterFormProps {
     setType: (type: string) => void;
@@ -14,14 +15,17 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
     const [mail, setMail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
     
     const handleSubmit = async (e: React.FormEvent) => {
+        setLoading(true);
         e.preventDefault();
         const status = await RegisterAuth(mail, password, repeatPassword);
 
         if (status === 201) {
             router.push("/dashboard");
         }
+        setLoading(false);
     };
     
     return(
@@ -118,6 +122,12 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
             >
             Login
             </button>
+            {}
+            {loading &&(
+                <div className="w-full mt-5">
+                    <LinearProgress />
+                </div>
+            )}
         </div>
     )
 }
