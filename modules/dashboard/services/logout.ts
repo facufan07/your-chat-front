@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function logout() {
     try{
-        const response = await axios.post("http://localhost:8080/api/v1/auth/logout", {},
+        const response = await axios.post("https://your-chat-back-production.up.railway.app/api/v1/auth/logout", {},
             {
                 withCredentials: true
             }

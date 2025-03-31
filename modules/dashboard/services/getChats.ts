@@ -4,7 +4,7 @@ import { contentChat } from "@/interfaces/interfaces";
 export async function getChats(page: number) {
     try{
         
-        const response = await axios.get<contentChat>("http://localhost:8080/api/v1/chat?page=" + page, {
+        const response = await axios.get<contentChat>("https://your-chat-back-production.up.railway.app/api/v1/chat?page=" + page, {
             withCredentials: true,
         });
 
