@@ -2,8 +2,9 @@ import { chat } from "@/interfaces/interfaces";
 import axios from "axios";
 
 export async function CreateChat(name: string) {
+    const url = process.env.ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
     try{
-        const response = await axios.post<chat>("https://your-chat-back-production.up.railway.app/api/v1/chat", { name: name }, {
+        const response = await axios.post<chat>(`${url}api/v1/chat`, { name: name }, {
             withCredentials: true,
         });
 

@@ -115,7 +115,7 @@ export default function Dash() {
                 />
                 <Browser/>
                 <div 
-                className='flex flex-col items-center h-[250px] overflow-y-auto gap-8 scroll px-2 '
+                className='flex flex-col items-center h-full overflow-y-auto gap-8 scroll px-2 '
                 ref={chatsRef}
                 >
                     {loading === false ?(
