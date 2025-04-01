@@ -21,6 +21,7 @@ export default function Dash() {
     const [chats, setChats] = useState<chat[]>([]);
     const [modal, setModal] = useState<string>("");
     const [error , setError] = useState<string>("");
+    const [errorLoadingChat, setErrorLoadingChat] = useState<string>("");
 
     const chatsRef = useRef<HTMLDivElement>(null);
     const [maxPage, setMaxPage] = useState<number>(0);
@@ -29,6 +30,7 @@ export default function Dash() {
     const [loadingMoreChats, setLoadingMoreChats] = useState<boolean>(false);
 
     useEffect(() => {
+        setErrorLoadingChat("");
         if(modal.length > 0){
             setModal("");
         }
@@ -43,7 +45,7 @@ export default function Dash() {
                 
             }
             catch{
-                setChats([]);
+                setErrorLoadingChat("An error has ocurred, try again later.");
                 setLoading(false);
             }
         }
@@ -115,7 +117,7 @@ export default function Dash() {
             className="object-cover absolute z-[-1]"
             />
 
-            <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[95%] flex flex-col items-center relative 
+            <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[97%] max-sm:h-[90%] flex flex-col items-center relative 
                                 max-lg:w-[90%] fade-in'>
                 <Image 
                 src="/logoyourchatt.png" 
@@ -129,52 +131,60 @@ export default function Dash() {
                 className='flex flex-col items-center h-full overflow-y-auto gap-8 scroll px-2 mt-10'
                 ref={chatsRef}
                 >
-                    {loading === false ?(
-
-                        chats.length === 0  ?(
-                            <p className='text-white text-2xl tracking-widest font-semibold'>
-                                Create your first chat!
-                            </p>
-                        ):(
-                            <>
-                            {chats.map((chat) => (
-                                <ChatContainer 
-                                key={chat.id} 
-                                name={chat.name} 
-                                creationDate={chat.creationDate} 
-                                lastMessageDate={chat.lastMessageDate}
-                                id={chat.id}
-                                reloadChats={reloadChats}
-                                />
-                            ))}
-                            
-                            {currentPage < maxPage && (
-                                loadingMoreChats ? (
-                                    <CircularProgress/>
-                                ):(
-                                    <button
-                                    className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all 
-                                            duration-200 cursor-pointer'
-                                    onClick={() =>{
-                                        setCurrentPage(currentPage + 1);
-                                    }}
-                                    >
-                                        <Image 
-                                        src="/upArrow.png" 
-                                        alt="loadMore" 
-                                        width={40}
-                                        height={35}
-                                        className="hover:scale-90 transition-all duration-200 rotate-180"
-                                        />
-                                    </button>
-                                )
-                                
-                            )}
-                            
-                            </>
-                        )
+                    {errorLoadingChat !== "" ?(
+                        <span className='text-red-500 text-xl tracking-widest font-semibold'>
+                            {errorLoadingChat}
+                        </span>
                     ):(
-                        <CircularProgress/>
+
+                        loading === false ?(
+
+                            chats.length === 0  ?(
+                                <p className='text-white text-2xl tracking-widest font-semibold'>
+                                    Create your first chat!
+                                </p>
+                            ):(
+                                <>
+                                {chats.map((chat) => (
+                                    <ChatContainer 
+                                    key={chat.id} 
+                                    name={chat.name} 
+                                    creationDate={chat.creationDate} 
+                                    lastMessageDate={chat.lastMessageDate}
+                                    id={chat.id}
+                                    reloadChats={reloadChats}
+                                    />
+                                ))}
+                                
+                                {currentPage < maxPage && (
+                                    loadingMoreChats ? (
+                                        <CircularProgress/>
+                                    ):(
+                                        <button
+                                        className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 
+                                                    transition-all 
+                                                duration-200 cursor-pointer'
+                                        onClick={() =>{
+                                            setCurrentPage(currentPage + 1);
+                                        }}
+                                        >
+                                            <Image 
+                                            src="/upArrow.png" 
+                                            alt="loadMore" 
+                                            width={40}
+                                            height={35}
+                                            className="hover:scale-90 transition-all duration-200 rotate-180"
+                                            />
+                                        </button>
+                                    )
+                                    
+                                )}
+                                
+                                </>
+                            )
+                        ):(
+                            <CircularProgress/>
+                        )
                     )}
                     
                         

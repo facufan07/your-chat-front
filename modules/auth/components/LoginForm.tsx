@@ -16,18 +16,34 @@ export default function LoginForm({ setType }: LoginFormProps) {
     const [mail, setMail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
 
     const handleSubmit = async (e: React.FormEvent) => {
+        setError("");
         setLoading(true);
         e.preventDefault();
-        const status = await loginAuth(mail, password);
+        const res = await loginAuth(mail, password);
 
-        if (status === 200) {
+        if (res === 200) {
             setTimeout(() => {
                 router.push("/dashboard");
             }, 1000);
         }
         else{
+            if (typeof res !== "number" && "backendMessage" in res && "message" in res) {
+
+                if(res.backendMessage === "Bad credentials"){
+                    setError("Incorrect password.");
+                    setLoading(false);
+                    return;
+                }
+                if(res.message === "Objeto no encontrado"){ 
+                    setError("Mail not found.")
+                    setLoading(false);
+                    return;
+                };
+            }
+            setError("An error has ocurred, try again later.");
             setLoading(false);
         }
 
@@ -84,6 +100,15 @@ export default function LoginForm({ setType }: LoginFormProps) {
                     },
                 }}
                 />
+                {
+                    error !== "" &&(
+                        <div className="w-full flex items-center justify-center mt-2">
+                            <span className="text-red-500 text-sm tracking-widest font-semibold text-center">
+                                {error}
+                            </span>
+                        </div>
+                    )
+                }
                 <div className="w-full flex flex-col items-center mt-10 max-lg:mt-5">
                     <button type="submit" 
                     className="mx-auto tracking-widest font-semibold bg-[#737373]/35 

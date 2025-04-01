@@ -20,28 +20,29 @@ export default function Chat({ chatId }: { chatId: string }) {
     const [message, setMessage] = useState<message[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
             
-            const handleMessages = async () => {
-                try{
-                    const pages = await getLastPage(id, "message");
-    
-                    const data = await getMessages(id, pages);
-                    setMessage(data);
-                    setCurrentPage(pages - 1)
-                }
-                catch{
-                    setMessage([]);
-                    
-                }
-                
-                setLoading(false);
+        const handleMessages = async () => {
+            setError("");
+            try{
+                const pages = await getLastPage(id, "message");
+
+                const data = await getMessages(id, pages);
+                setMessage(data);
+                setCurrentPage(pages - 1)
+            }
+            catch{
+                setError("An error has ocurred, try again later.");
             }
             
-            handleMessages();
-            
-        },[])
+            setLoading(false);
+        }
+        
+        handleMessages();
+        
+    },[])
 
     return (
         <main className="h-dvh w-dvw flex justify-center items-center overflow-x-hidden">
@@ -52,7 +53,7 @@ export default function Chat({ chatId }: { chatId: string }) {
             className="object-cover absolute z-[-1]"
             />
 
-            <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[95%] flex flex-col items-center relative 
+            <section className='bg-black/76 w-[35%] h-[75%] max-sm:w-[97%] max-sm:h-[90%] flex flex-col items-center relative 
                                 max-lg:w-[90%] fade-in'>
                 <div className='bg-[#484848]/86 w-full py-3 px-5 flex items-center'>
                     <Link href={`/dashboard`}>
@@ -74,19 +75,26 @@ export default function Chat({ chatId }: { chatId: string }) {
                     {name}
                     </h1>
                 </div>
-
-                {loading ?(
+                {error !== "" ?(
                     <div className='h-full w-full flex justify-center items-center'>
-                        <CircularProgress/>
+                        <span className='text-red-500 text-xl font-semibold tracking-widest'>
+                            {error}
+                        </span>
                     </div>
                 ):(
-                    <Messages 
-                    chatId={id} 
-                    messages={message} 
-                    setMessages={setMessage}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    />
+                    loading ?(
+                        <div className='h-full w-full flex justify-center items-center'>
+                            <CircularProgress/>
+                        </div>
+                    ):(
+                        <Messages 
+                        chatId={id} 
+                        messages={message} 
+                        setMessages={setMessage}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        />
+                    )
                 )}
                 
                 <UtilBar chatId={id} messages={message} setMessages={setMessage}/>

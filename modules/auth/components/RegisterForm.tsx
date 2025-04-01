@@ -16,14 +16,38 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
     const [password, setPassword] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>("");
     
     const handleSubmit = async (e: React.FormEvent) => {
+        setError("");
         setLoading(true);
         e.preventDefault();
-        const status = await RegisterAuth(mail, password, repeatPassword);
+        const res = await RegisterAuth(mail, password, repeatPassword);
 
-        if (status === 201) {
+        if (res === 201) {
             router.push("/dashboard");
+        }
+        else{
+            if(typeof res !== "number" && "backendMessage" in res){
+                if(res.backendMessage === "Passwords does not match"){
+                    setError("Passwords does not match.");
+                    setLoading(false);
+                    return;
+                }
+
+                if(res.backendMessage.slice(0, 44) === "could not execute statement [Duplicate entry"){
+                    setError("Mail already in use.");
+                    setLoading(false);
+                    return;
+                }
+
+                if(res.backendMessage.slice(0, 10) === "Validation"){
+                    setError("Password must be at least 8 characters long.");
+                    setLoading(false);
+                    return;
+                }
+            }
+            setError("An error has ocurred, try again later.");
         }
         setLoading(false);
     };
@@ -102,6 +126,13 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
                     },
                 }}
                 />
+                {error !== "" && (
+                    <div className="w-full mt-2 flex items-center justify-center">
+                        <span className="text-red-500 tracking-widest font-semibold text-sm text-center">
+                            {error}
+                        </span>
+                    </div>
+                )}
                 <div className="w-full flex flex-col items-center mt-5">
                     <button type="submit" 
                     className="mx-auto tracking-widest font-semibold bg-[#737373]/35 

@@ -7,7 +7,6 @@ export async function getLastPage(chatId: number, path: string) {
         const res = await axios.get<totalPages>(`${url}api/v1/${path}${chatId === -1 ? "" : `/${chatId}`}`,{
             withCredentials: true,
         });
-        console.log(res.data.totalPages);
         return res.data.totalPages;
     }catch{
         console.log("error");
