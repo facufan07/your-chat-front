@@ -21,7 +21,7 @@ export default function ChatContainer({ name, creationDate, lastMessageDate, id,
     const [moreInfo, setMoreInfo] = useState<boolean>(false);
     const [deleteChat, setDeleteChat] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const nameFormatted = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_");
+    const nameFormatted = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ /g, "_").replace(/-/g, "_");
 
     dayjs.locale("en");
 
