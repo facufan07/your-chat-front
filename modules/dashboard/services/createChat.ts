@@ -3,7 +3,7 @@ import axios from "axios";
 
 export async function CreateChat(name: string) {
     try{
-        const response = await axios.post<chat>("http://localhost:8080/api/v1/chat", { name: name }, {
+        const response = await axios.post<chat>("https://your-chat-back-production.up.railway.app/api/v1/chat", { name: name }, {
             withCredentials: true,
         });
 

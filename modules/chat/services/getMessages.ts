@@ -3,7 +3,7 @@ import axios from "axios";
 
 export async function getMessages(chatId: number, totalPages: number) {
     try{
-        const response = await axios.get<contentMessage>(`http://localhost:8080/api/v1/message/${chatId}?page=${totalPages - 1}`,{
+        const response = await axios.get<contentMessage>(`https://your-chat-back-production.up.railway.app/api/v1/message/${chatId}?page=${totalPages - 1}`,{
             withCredentials: true,
         });
 
