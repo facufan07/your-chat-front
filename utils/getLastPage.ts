@@ -10,6 +10,6 @@ export async function getLastPage(chatId: number, path: string) {
         return res.data.totalPages;
     }catch{
         console.log("error");
-        return 0;
+        return 1;
     }
 }
