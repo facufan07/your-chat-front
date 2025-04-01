@@ -1,7 +1,6 @@
 "use client"
 
 import Image from 'next/image'
-import Browser from '../components/browser'
 import ChatContainer from '../components/chatContainer'
 import NewChatButton from '../components/newChatButton'
 import { useEffect, useRef, useState } from 'react'
@@ -27,6 +26,7 @@ export default function Dash() {
     const [maxPage, setMaxPage] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingMoreChats, setLoadingMoreChats] = useState<boolean>(false);
 
     useEffect(() => {
         if(modal.length > 0){
@@ -60,12 +60,21 @@ export default function Dash() {
 
     }
 
-    const loadMoreMessages = async (newPage: number) => {
-        if(newPage <= maxPage && chatsRef.current){
+    const loadMoreChats = (newPage: number) => {
+        if(newPage > maxPage || loading) return;
+
+        
+        setLoadingMoreChats(true);
+        
+        
+        if(chatsRef.current){
+
             const previousScrollHeight = chatsRef.current.scrollHeight;
+
+            getChats(newPage).then((data) => {
+                setChats((prevChats: chat[]) => [...prevChats, ...data ]);
+            });
             
-            const data = await getChats(newPage);
-            setChats((prevChats: chat[]) => [...prevChats, ...data ]);
             
             setTimeout(()=>{
                 if(chatsRef.current){
@@ -73,6 +82,8 @@ export default function Dash() {
                 }
             }, 0)
         }
+
+        setLoadingMoreChats(false);
     }
 
     const reloadChats = async () => {
@@ -91,7 +102,7 @@ export default function Dash() {
 
     useEffect(() => {
         if (currentPage > 0) {
-            loadMoreMessages(currentPage);
+            loadMoreChats(currentPage);
         }
     }, [currentPage]);
 
@@ -113,9 +124,9 @@ export default function Dash() {
                 height={400}
                 className="mt-10"
                 />
-                <Browser/>
+                
                 <div 
-                className='flex flex-col items-center h-full overflow-y-auto gap-8 scroll px-2 '
+                className='flex flex-col items-center h-full overflow-y-auto gap-8 scroll px-2 mt-10'
                 ref={chatsRef}
                 >
                     {loading === false ?(
@@ -138,21 +149,26 @@ export default function Dash() {
                             ))}
                             
                             {currentPage < maxPage && (
-                                <button
-                                className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all 
-                                        duration-200 cursor-pointer'
-                                onClick={() =>{
-                                    setCurrentPage(currentPage + 1);
-                                }}
-                                >
-                                    <Image 
-                                    src="/upArrow.png" 
-                                    alt="loadMore" 
-                                    width={40}
-                                    height={35}
-                                    className="hover:scale-90 transition-all duration-200 rotate-180"
-                                    />
-                                </button>
+                                loadingMoreChats ? (
+                                    <CircularProgress/>
+                                ):(
+                                    <button
+                                    className='rounded-full bg-[#484848]/86 p-2 hover:bg-black/76 transition-all 
+                                            duration-200 cursor-pointer'
+                                    onClick={() =>{
+                                        setCurrentPage(currentPage + 1);
+                                    }}
+                                    >
+                                        <Image 
+                                        src="/upArrow.png" 
+                                        alt="loadMore" 
+                                        width={40}
+                                        height={35}
+                                        className="hover:scale-90 transition-all duration-200 rotate-180"
+                                        />
+                                    </button>
+                                )
+                                
                             )}
                             
                             </>
@@ -165,7 +181,7 @@ export default function Dash() {
                 </div>
                 
                 <div
-                className='flex items-end w-full px-5 h-full mb-5'
+                className='flex items-end w-full px-5 h-[20%] mb-5'
                 >   
                     <div className='flex items-center justify-between w-full'>
                         <button 
