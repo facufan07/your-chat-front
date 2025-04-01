@@ -69,7 +69,7 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
             disabled={isSending}
             >
                 <Image 
-                src="/Paper plane.png" 
+                src="/Paperplane.png" 
                 alt="Send message" 
                 width={40}
                 height={35}
