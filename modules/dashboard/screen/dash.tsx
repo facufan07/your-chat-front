@@ -174,7 +174,7 @@ export default function Dash() {
                         onClick={() => setModal("user")}
                         >
                             <Image 
-                            src="/user.png" 
+                            src="/User.png" 
                             alt="loadMore" 
                             width={40}
                             height={35}
