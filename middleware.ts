@@ -20,7 +20,7 @@ export async function middleware(req: NextRequest) {
 
 
 async function getAuthentication(req: NextRequest) {
-    const url = process.env.ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
+    const url = process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
     try{
         const response = await fetch(`${url}api/v1/auth/isAuth`, {
             method: 'GET',
