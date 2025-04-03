@@ -3,13 +3,22 @@
 import Image from "next/image"
 import Text from "../components/Text"
 import LoginForm from "../components/LoginForm"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RegisterForm from "../components/RegisterForm";
 import "./auth.css"
+import { getToken } from "../../../utils/localstorage";
+import { useRouter } from "next/navigation";
 
 export default function Auth() {
     const [type, setType] = useState<string>("login");
+    const router = useRouter();
 
+    useEffect(() => {
+        const token = getToken();
+        if (token !== null) {
+            router.push("/dashboard");
+        }
+    },[])
     return(
         <main className="h-dvh w-dwh flex justify-center items-center overflow-x-hidden">
             <Image 
