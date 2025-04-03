@@ -1,15 +1,17 @@
 import axios from "axios";
 
-import { error } from "@/interfaces/interfaces";
+import { error, token } from "@/interfaces/interfaces";
+import { saveToken } from "@/utils/localstorage";
 
 export async function loginAuth(mail: string, password: string):Promise<number | error> {
     const url = process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
     try {
-        const res = await axios.post<number>(`${url}api/v1/auth/login`, 
-            { mail: mail, password: password }, 
-            { withCredentials: true });
+        const res = await axios.post<token>(`${url}api/v1/auth/login`, 
+            { mail: mail, password: password })
         
-        return res.data;
+        saveToken(res.data.token);
+        
+        return res.status;
     } catch (err: any) {
         if(axios.isAxiosError(err)) {
             return err.response?.data;
@@ -18,3 +20,4 @@ export async function loginAuth(mail: string, password: string):Promise<number |
         }
     }
 }
+

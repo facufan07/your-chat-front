@@ -13,7 +13,7 @@ import "./dash.css"
 import CreateChatForm from '../components/createChatForm'
 import Alert from '@/utils/alert'
 import { getLastPage } from '@/utils/getLastPage'
-import { logout } from '../services/logout'
+import { getToken, removeToken } from '@/utils/localstorage'
 
 export default function Dash() {
     const router = useRouter();
@@ -30,36 +30,45 @@ export default function Dash() {
     const [loadingMoreChats, setLoadingMoreChats] = useState<boolean>(false);
 
     useEffect(() => {
-        setErrorLoadingChat("");
-        if(modal.length > 0){
-            setModal("");
-        }
+        const token = getToken();
 
-        const handleChat = async () => {
-            try{
-                const pages = await getLastPage(-1, "chat");
-                const data = await getChats(currentPage);
-                setChats(data);
-                setLoading(false);
-                setMaxPage(pages - 1);
-                
-            }
-            catch{
-                setErrorLoadingChat("An error has ocurred, try again later.");
-                setLoading(false);
-            }
+        if (token === null) {
+            router.push("/login");
         }
-        
-        handleChat();
-        return;
+        else{
+            setErrorLoadingChat("");
+            if(modal.length > 0){
+                setModal("");
+            }
+    
+            const handleChat = async () => {
+                try{
+                    const pages = await getLastPage(-1, "chat");
+                    const data = await getChats(currentPage);
+                    setChats(data);
+                    setLoading(false);
+                    setMaxPage(pages - 1);
+                    
+                }
+                catch{
+                    setErrorLoadingChat("An error has ocurred, try again later.");
+                    setLoading(false);
+                }
+            }
+            
+            handleChat();
+            return;
+        }
     },[])
 
     async function handleLogout(){
-        const res = await logout();
-        if(res === 200){
-            router.push("/login");
+        const token = getToken();
+
+        if (token !== null){
+            removeToken();
         }
 
+        router.push("/login");
     }
 
     const loadMoreChats = (newPage: number) => {

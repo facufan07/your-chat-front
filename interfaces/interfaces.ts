@@ -32,3 +32,7 @@ export interface message{
 export interface totalPages{
     totalPages: number;
 }
+
+export interface token{
+    token: string;
+}

@@ -10,9 +10,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import "./chatScreen.css";
 import { getMessages } from '../services/getMessages';
 import { getLastPage } from '@/utils/getLastPage';
+import { useRouter } from 'next/navigation';
+import { getToken } from '@/utils/localstorage';
 
 
 export default function Chat({ chatId }: { chatId: string }) {
+
+    const router = useRouter();
 
     const name = chatId.split("-")[0].replace(/_/g, " ");
     const id = parseInt(chatId.split("-")[1]);
@@ -23,24 +27,32 @@ export default function Chat({ chatId }: { chatId: string }) {
     const [error, setError] = useState<string>("");
 
     useEffect(() => {
-            
-        const handleMessages = async () => {
-            setError("");
-            try{
-                const pages = await getLastPage(id, "message");
+        const token = getToken();
 
-                const data = await getMessages(id, pages);
-                setMessage(data);
-                setCurrentPage(pages - 1)
-            }
-            catch{
-                setError("An error has ocurred, try again later.");
+        if (token === null) {
+            router.push("/login");
+        }
+        else{
+            const handleMessages = async () => {
+                setError("");
+                try{
+                    const pages = await getLastPage(id, "message");
+    
+                    const data = await getMessages(id, pages);
+                    setMessage(data);
+                    setCurrentPage(pages - 1)
+                }
+                catch{
+                    setError("An error has ocurred, try again later.");
+                }
+                
+                setLoading(false);
             }
             
-            setLoading(false);
+            handleMessages();
         }
+            
         
-        handleMessages();
         
     },[])
 

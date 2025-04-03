@@ -1,10 +1,13 @@
-import { error } from "@/interfaces/interfaces";
+import { error, token } from "@/interfaces/interfaces";
+import { saveToken } from "@/utils/localstorage";
 import axios from "axios";
 
 export async function RegisterAuth(mail: string, password: string, repeatPassword: string):Promise<number | error>{
     const url = process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
     try{
-        const res = await axios.post(`${url}api/v1/auth/register`, { mail: mail, password: password, repeatedPassword: repeatPassword }, { withCredentials: true });
+        const res = await axios.post<token>(`${url}api/v1/auth/register`, { mail: mail, password: password, repeatedPassword: repeatPassword }, { withCredentials: true });
+        
+        saveToken(res.data.token);
         
         return res.status;
     }catch(err: any){
