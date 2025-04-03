@@ -1,6 +1,7 @@
 "use client"
 
-import TextField from "@mui/material/TextField";
+import { TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { loginAuth } from "../services/LoginAuth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ export default function LoginForm({ setType }: LoginFormProps) {
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         setError("");
@@ -83,7 +85,7 @@ export default function LoginForm({ setType }: LoginFormProps) {
                 variant="outlined"
                 className="bg-black/54 rounded-lg shadow-md"
                 fullWidth
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{
@@ -97,6 +99,17 @@ export default function LoginForm({ setType }: LoginFormProps) {
                         color: "#fff",
                         letterSpacing: "1.5px",
                     },
+                    },
+                }}
+                slotProps={{
+                    input: {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                {showPassword ? <VisibilityOff sx={{ color: "white" }} /> : <Visibility sx={{ color: "white" }} />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
                     },
                 }}
                 />

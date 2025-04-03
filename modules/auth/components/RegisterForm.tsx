@@ -1,5 +1,6 @@
 "use client"
-import TextField from "@mui/material/TextField";
+import { TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { RegisterAuth } from "../services/RegisterAuth";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,8 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
     
     const handleSubmit = async (e: React.FormEvent) => {
         setError("");
@@ -86,7 +89,7 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
                 variant="outlined"
                 className="bg-black/54 rounded-lg shadow-md "
                 fullWidth
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{
@@ -102,6 +105,17 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
                     },
                     },
                 }}
+                slotProps={{
+                    input: {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                                {showPassword ? <VisibilityOff sx={{ color: "white" }} /> : <Visibility sx={{ color: "white" }} />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    },
+                }}
                 />
 
                 <TextField
@@ -109,7 +123,7 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
                 variant="outlined"
                 className="bg-black/54 rounded-lg shadow-md "
                 fullWidth
-                type="password"
+                type={showRepeatPassword ? "text" : "password"}
                 onChange={(e) => setRepeatPassword(e.target.value)}
                 required
                 sx={{
@@ -123,6 +137,17 @@ export default function RegisterForm({ setType }: RegisterFormProps) {
                         color: "#fff",
                         letterSpacing: "1.5px",
                     },
+                    },
+                }}
+                slotProps={{
+                    input: {
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={() => setShowRepeatPassword(!showRepeatPassword)} edge="end">
+                                {showRepeatPassword ? <VisibilityOff sx={{ color: "white" }} /> : <Visibility sx={{ color: "white" }} />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
                     },
                 }}
                 />
