@@ -10,8 +10,6 @@ export async function getMessages(chatId: number, totalPages: number) {
             headers: {"Authorization": `Bearer ${token}`},
         });
 
-        console.log(response.data.content);
-
         return response.data.content;
     }catch{
         return [];
