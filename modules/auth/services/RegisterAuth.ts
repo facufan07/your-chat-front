@@ -19,20 +19,3 @@ export async function RegisterAuth(mail: string, password: string, repeatPasswor
         return 500;
     }
 }
-
-
-backendMessage
-: 
-"could not execute statement [Duplicate entry 'fandinofacundo123@gmail.com' for key 'user.UK6sou31qus5dnws6dwfu61e71v'] [insert into user (creation_date,mail,password,role) values (?,?,?,?)]; SQL [insert into user (creation_date,mail,password,role) values (?,?,?,?)]; constraint [user.UK6sou31qus5dnws6dwfu61e71v]"
-message
-: 
-"Error interno del servidor, intentelo mas tarde"
-method
-: 
-"POST"
-timestamp
-: 
-"2025-04-01T15:32:06.023767"
-url
-: 
-"http://localhost:8080/api/v1/auth/register"
