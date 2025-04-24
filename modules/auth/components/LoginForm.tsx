@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./authComponent.css"
 import LinearProgress from '@mui/material/LinearProgress';
+import LoginOAuth from "./LoginOAuth";
 
 interface LoginFormProps {
     setType: (type: string) => void
@@ -133,6 +134,8 @@ export default function LoginForm({ setType }: LoginFormProps) {
                 </div>
             </form>
 
+            <LoginOAuth/>
+
             <span className="text-white tracking-widest mt-7 text-sm max-lg:text-center">Don't have an account?</span>
             <button 
             className="tracking-widest mt-2 text-sm 
@@ -148,7 +151,6 @@ export default function LoginForm({ setType }: LoginFormProps) {
             <div className="w-full mt-6">
                 <LinearProgress/>
             </div>
-
             )}
             
         </div>
