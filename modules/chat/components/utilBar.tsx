@@ -22,7 +22,10 @@ export default function UtilBar({chatId, messages, setMessages}:UtilBarProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         setIsSending(true);
         e.preventDefault();
-        if(message === "") return;
+        if(message === ""){
+            setIsSending(false);
+            return;
+        } 
         setLoading(true);
         const response = await CreateMessage(chatId, message, type);
         if(response !== false){
