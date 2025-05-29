@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function LoginOAuth() {
     const handleClick = () => {
-        window.open(`${process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/"}api/v1/oauth2/authorization/google`, "_blank", "width=500,height=600");
+        window.open(`${process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://api.apiapp.shop/" : "http://localhost:8080/"}api/v1/oauth2/authorization/google`, "_blank", "width=500,height=600");
     }
     useEffect(() => {
         function handleMessage(event: MessageEvent) {
