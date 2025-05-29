@@ -2,7 +2,7 @@ import { getToken } from "@/utils/localstorage";
 import axios from "axios";
 
 export async function DeleteChat(id: number) {
-    const url = process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://your-chat-back-production.up.railway.app/" : "http://localhost:8080/";
+    const url = process.env.NEXT_PUBLIC_ENVIRONMENT === "production" ? "https://api.apiapp.shop/" : "http://localhost:8080/";
     const token = getToken();
     
     try{
